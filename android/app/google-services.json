@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "112227872129",
+    "project_id": "movie-cite",
+    "storage_bucket": "movie-cite.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112227872129:android:b60a2cef20e01636990c80",
+        "android_client_info": {
+          "package_name": "com.VireshDev.movie_cite"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112227872129-9oj3a547ml2bis8qfhcglesaivtsstd1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLmy4JuXwz6mNFo0cR3Cu3-EvQEd7XMRs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112227872129-9oj3a547ml2bis8qfhcglesaivtsstd1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "112227872129-v9teq6tooqjbfge9dshdeadunvgn617l.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.movieCite"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
