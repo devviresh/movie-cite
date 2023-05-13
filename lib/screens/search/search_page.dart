@@ -14,11 +14,11 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-  
   late Map<String, dynamic> suggestedSearch;
+
   Future getSearchKeywords() async {
     http.Response response = await http.get(Uri.parse(
-        ('$baseUrl/search/keyword?query=$searchInput&api_key=$apiKey&page=1')));
+        ('$TmdbBaseUrl/search/keyword?query=$searchInput&api_key=$apiKey&page=1')));
     if (response.statusCode == 200) {
       suggestedSearch = jsonDecode(response.body);
     } else {
@@ -35,6 +35,7 @@ class _SearchPageState extends State<SearchPage> {
       appBar: AppBar(
         leading: Icon(Icons.search),
         title: TextFormField(
+          autofocus: true,
           controller: input,
           onChanged: (value) {
             setState(() {
@@ -43,20 +44,21 @@ class _SearchPageState extends State<SearchPage> {
             });
           },
           onFieldSubmitted: (value) {
-            print(searchInput);         //TODO:remove this
+            print(searchInput); //TODO:remove this
             Navigator.pushNamed(context, SearchResults.id,
                 arguments: searchInput);
           },
           decoration: InputDecoration(
-            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.white38)),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white38)),
             hintText: 'Search for Movies, Tv Series, Web Series and More',
           ),
         ),
         actions: [
           IconButton(
-            onPressed: (){
-              input.text = "";
-            },
+              onPressed: () {
+                input.text = "";
+              },
               icon: Icon(Icons.close))
         ],
       ),
@@ -77,11 +79,13 @@ class _SearchPageState extends State<SearchPage> {
                           });
                         },
                         child: Container(
-                          padding: EdgeInsets.fromLTRB(70.0,10.0,20.0,10.0),
+                          padding: EdgeInsets.fromLTRB(70.0, 10.0, 20.0, 10.0),
                           child: Text(
                             '${suggestedSearch['results'][i]['name']}',
                             textAlign: TextAlign.start,
-                            style: TextStyle(color: Colors.white70,),
+                            style: TextStyle(
+                              color: Colors.white70,
+                            ),
                           ),
                         ))
                 ],

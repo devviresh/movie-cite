@@ -63,10 +63,7 @@ class _NotificationsState extends State<Notifications> {
                               children: [
                                 Row(
                                   children: [
-                                    Icon(
-                                      Icons.calendar_month,
-                                      size: 18.0,
-                                    ),
+                                    Icon(Icons.calendar_month, size: 18.0),
                                     SizedBox(width: 5.0),
                                     Text('28 april | 11:30am'),
                                   ],
@@ -86,22 +83,337 @@ class _NotificationsState extends State<Notifications> {
                       children: [
                         GestureDetector(
                             onTap: () {},
-                            child: Text(
-                              'Reject',
-                              style: TextStyle(color: Colors.red),
-                            )),
+                            child: Text('Reject',
+                                style: TextStyle(color: Colors.red))),
                         SizedBox(width: 15.0),
                         GestureDetector(
                             onTap: () {},
-                            child: Text(
-                              'Accept',
-                              style: TextStyle(color: Colors.green),
-                            )),
+                            child: Text('Accept',
+                                style: TextStyle(color: Colors.green))),
                       ],
                     ),
                   )
                 ],
               ),
+
+            // Column(
+            //   children: [
+            //     Container(
+            //       padding: EdgeInsets.all(10.0),
+            //       margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+            //       decoration: BoxDecoration(
+            //           color: Color(0xff424242),
+            //           boxShadow: [kBoxShadow],
+            //           borderRadius: BorderRadius.circular(10.0)),
+            //       child: Row(
+            //         children: [
+            //           CircleAvatar(
+            //             radius: 25.0,
+            //             foregroundImage: AssetImage('./images/vineet.jpeg'),
+            //           ),
+            //           SizedBox(
+            //             width: 10.0,
+            //           ),
+            //           Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Row(
+            //                 children: [
+            //                   Text(
+            //                     'Vineet Kumar',
+            //                     style: TextStyle(
+            //                         fontSize: 16.0,
+            //                         fontWeight: FontWeight.w500),
+            //                   ),
+            //                   Text(' invited you to watch'),
+            //                 ],
+            //               ),
+            //               Text(
+            //                 'Guardian of the galaxy',
+            //                 style: TextStyle(
+            //                     color: Colors.white70,
+            //                     fontSize: 15.0,
+            //                     fontWeight: FontWeight.w500),
+            //               ),
+            //               SizedBox(
+            //                 height: 5.0,
+            //               ),
+            //               Row(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: [
+            //                   Row(
+            //                     children: [
+            //                       Icon(
+            //                         Icons.calendar_month,
+            //                         size: 18.0,
+            //                       ),
+            //                       SizedBox(
+            //                         width: 5.0,
+            //                       ),
+            //                       Text('5 may | 4:00pm'),
+            //                     ],
+            //                   ),
+            //                   // Row(
+            //                   //   mainAxisAlignment: MainAxisAlignment.end,
+            //                   //   children: [
+            //                   //     GestureDetector(
+            //                   //         onTap: () {},
+            //                   //         child: Icon(Icons.highlight_remove_rounded,
+            //                   //           color: Colors.red,size: 25.0,)
+            //                   //     ),
+            //                   //     SizedBox(width: 10.0,),
+            //                   //     GestureDetector(
+            //                   //         onTap: () {},
+            //                   //         child: Icon(Icons.check_circle_outline_rounded,
+            //                   //           color: Colors.green,)
+            //                   //     ),
+            //                   //   ],
+            //                   // ),
+            //                 ],
+            //               )
+            //             ],
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //     SizedBox(height: 5.0,),
+            //     Padding(
+            //       padding: const EdgeInsets.only(right: 20.0),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children: [
+            //           GestureDetector(
+            //               onTap: () {},
+            //               child: Text('Reject',
+            //                 style: TextStyle(
+            //                     color: Colors.red
+            //                 ),)
+            //           ),
+            //           SizedBox(width: 15.0,),
+            //           GestureDetector(
+            //               onTap: () {},
+            //               child: Text('Accept',
+            //                 style: TextStyle(
+            //                     color: Colors.green
+            //                 ),)
+            //           ),
+            //         ],
+            //       ),
+            //     )
+            //   ],
+            // ),
+            // Column(
+            //   children: [
+            //     Container(
+            //       padding: EdgeInsets.all(10.0),
+            //       margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+            //       decoration: BoxDecoration(
+            //           color: Color(0xff424242),
+            //           boxShadow: [kBoxShadow],
+            //           borderRadius: BorderRadius.circular(10.0)),
+            //       child: Row(
+            //         children: [
+            //           CircleAvatar(
+            //             radius: 25.0,
+            //             foregroundImage: AssetImage('./images/sifat.jpeg'),
+            //           ),
+            //           SizedBox(
+            //             width: 10.0,
+            //           ),
+            //           Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Row(
+            //                 children: [
+            //                   Text(
+            //                     'Sifat Naaz',
+            //                     style: TextStyle(
+            //                         fontSize: 16.0,
+            //                         fontWeight: FontWeight.w500),
+            //                   ),
+            //                   Text(' invited you to watch'),
+            //                 ],
+            //               ),
+            //               Text(
+            //                 'PS-2 | Ponniyan Selvan - 2',
+            //                 style: TextStyle(
+            //                     color: Colors.white70,
+            //                     fontSize: 15.0,
+            //                     fontWeight: FontWeight.w500),
+            //               ),
+            //               SizedBox(
+            //                 height: 5.0,
+            //               ),
+            //               Row(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: [
+            //                   Row(
+            //                     children: [
+            //                       Icon(
+            //                         Icons.calendar_month,
+            //                         size: 18.0,
+            //                       ),
+            //                       SizedBox(
+            //                         width: 5.0,
+            //                       ),
+            //                       Text('28 april | 11:30am'),
+            //                     ],
+            //                   ),
+            //                   // Row(
+            //                   //   mainAxisAlignment: MainAxisAlignment.end,
+            //                   //   children: [
+            //                   //     GestureDetector(
+            //                   //         onTap: () {},
+            //                   //         child: Icon(Icons.highlight_remove_rounded,
+            //                   //           color: Colors.red,size: 25.0,)
+            //                   //     ),
+            //                   //     SizedBox(width: 10.0,),
+            //                   //     GestureDetector(
+            //                   //         onTap: () {},
+            //                   //         child: Icon(Icons.check_circle_outline_rounded,
+            //                   //           color: Colors.green,)
+            //                   //     ),
+            //                   //   ],
+            //                   // ),
+            //                 ],
+            //               )
+            //             ],
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //     SizedBox(height: 5.0,),
+            //     Padding(
+            //       padding: const EdgeInsets.only(right: 20.0),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children: [
+            //           GestureDetector(
+            //               onTap: () {},
+            //               child: Text('Reject',
+            //                 style: TextStyle(
+            //                     color: Colors.red
+            //                 ),)
+            //           ),
+            //           SizedBox(width: 15.0,),
+            //           GestureDetector(
+            //               onTap: () {},
+            //               child: Text('Accept',
+            //                 style: TextStyle(
+            //                     color: Colors.green
+            //                 ),)
+            //           ),
+            //         ],
+            //       ),
+            //     )
+            //   ],
+            // ),
+            // Column(
+            //   children: [
+            //     Container(
+            //       padding: EdgeInsets.all(10.0),
+            //       margin: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+            //       decoration: BoxDecoration(
+            //           color: Color(0xff424242),
+            //           boxShadow: [kBoxShadow],
+            //           borderRadius: BorderRadius.circular(10.0)),
+            //       child: Row(
+            //         children: [
+            //           Icon(
+            //             Icons.person_pin,
+            //             size: 50.0,
+            //           ),
+            //           SizedBox(
+            //             width: 10.0,
+            //           ),
+            //           Column(
+            //             crossAxisAlignment: CrossAxisAlignment.start,
+            //             children: [
+            //               Row(
+            //                 children: [
+            //                   Text(
+            //                     'Anonymous',
+            //                     style: TextStyle(
+            //                         fontSize: 16.0,
+            //                         fontWeight: FontWeight.w500),
+            //                   ),
+            //                   Text(' invited you to watch'),
+            //                 ],
+            //               ),
+            //               Text(
+            //                 'The Gray Man',
+            //                 style: TextStyle(
+            //                     color: Colors.white70,
+            //                     fontSize: 15.0,
+            //                     fontWeight: FontWeight.w500),
+            //               ),
+            //               SizedBox(
+            //                 height: 5.0,
+            //               ),
+            //               Row(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: [
+            //                   Row(
+            //                     children: [
+            //                       Icon(
+            //                         Icons.calendar_month,
+            //                         size: 18.0,
+            //                       ),
+            //                       SizedBox(
+            //                         width: 5.0,
+            //                       ),
+            //                       Text('2 july | 9:00pm'),
+            //                     ],
+            //                   ),
+            //                   // Row(
+            //                   //   mainAxisAlignment: MainAxisAlignment.end,
+            //                   //   children: [
+            //                   //     GestureDetector(
+            //                   //         onTap: () {},
+            //                   //         child: Icon(Icons.highlight_remove_rounded,
+            //                   //           color: Colors.red,size: 25.0,)
+            //                   //     ),
+            //                   //     SizedBox(width: 10.0,),
+            //                   //     GestureDetector(
+            //                   //         onTap: () {},
+            //                   //         child: Icon(Icons.check_circle_outline_rounded,
+            //                   //           color: Colors.green,)
+            //                   //     ),
+            //                   //   ],
+            //                   // ),
+            //                 ],
+            //               )
+            //             ],
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //     SizedBox(height: 5.0,),
+            //     Padding(
+            //       padding: const EdgeInsets.only(right: 20.0),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.end,
+            //         children: [
+            //           GestureDetector(
+            //               onTap: () {},
+            //               child: Text('Reject',
+            //                 style: TextStyle(
+            //                     color: Colors.red
+            //                 ),)
+            //           ),
+            //           SizedBox(width: 15.0,),
+            //           GestureDetector(
+            //               onTap: () {},
+            //               child: Text('Accept',
+            //                 style: TextStyle(
+            //                     color: Colors.green
+            //                 ),)
+            //           ),
+            //         ],
+            //       ),
+            //     )
+            //   ],
+            // ),
           ],
         ));
   }

@@ -3,6 +3,7 @@ import 'package:movie_cite/constants.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../data/auth_api.dart';
 import '../data/movies_details_api.dart';
 
 class MoviesDetails extends StatefulWidget {
@@ -23,9 +24,11 @@ class _MoviesDetailsState extends State<MoviesDetails> {
     setState(() {
       if (arguments != null) movieData = arguments;
     });
-    responseStatus = getCastAndCrew(movieData['id'].toString());
-    responseStatus1 = getMovieImages(movieData['id'].toString());
-    responseStatus3 = getRecommendedMovies(movieData['id'].toString());
+    responseStatus = getCastAndCrew(movieData['movieDetails']['id'].toString());
+    responseStatus1 =
+        getMovieImages(movieData['movieDetails']['id'].toString());
+    responseStatus3 =
+        getRecommendedMovies(movieData['movieDetails']['id'].toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -47,7 +50,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: Image.network(
-                      'https://image.tmdb.org/t/p/w185/${movieData['poster_path']}',
+                      'https://image.tmdb.org/t/p/w185/${movieData['movieDetails']['poster_path']}',
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -61,7 +64,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          '${movieData['title']}',
+                          '${movieData['movieDetails']['title']}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
@@ -72,11 +75,11 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             RatingBar.builder(
-                                initialRating: (movieData['vote_average']) / 2,
-                                itemBuilder: (context, index) => Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
+                                initialRating: (movieData['movieDetails']
+                                        ['vote_average']) /
+                                    2,
+                                itemBuilder: (context, index) =>
+                                    Icon(Icons.star, color: Colors.amber),
                                 allowHalfRating: true,
                                 itemCount: 5,
                                 itemSize: 27.0,
@@ -84,13 +87,11 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                 glowColor: Colors.amberAccent,
                                 onRatingUpdate: (value) {
                                   final snackBar = SnackBar(
-                                    content: Text(
-                                      'Confirm your rating !',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w500),
-                                    ),
+                                    content: Text('Confirm your rating !',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
                                     backgroundColor: Color(0xff424242),
                                     action: SnackBarAction(
                                       textColor: Colors.cyanAccent,
@@ -107,7 +108,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                 }),
                             SizedBox(width: 20.0),
                             Text(
-                              '${movieData['vote_average'].toStringAsFixed(2)}',
+                              '${movieData['movieDetails']['vote_average'].toStringAsFixed(2)}',
                               style: TextStyle(fontSize: 15.0),
                             ),
                             SizedBox(width: 5.0)
@@ -121,12 +122,14 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                             scrollDirection: Axis.horizontal,
                             children: [
                               for (int j = 0;
-                                  j < movieData['genres'].length;
+                                  j <
+                                      movieData['movieDetails']['genres']
+                                          .length;
                                   j++)
                                 Container(
                                   margin: EdgeInsets.only(right: 10.0),
                                   child: Text(
-                                    '${movieData['genres'][j]['name']}',
+                                    '${movieData['movieDetails']['genres'][j]['name']}',
                                     style: TextStyle(
                                         fontSize: 16.0, color: Colors.white60),
                                   ),
@@ -134,7 +137,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                             ],
                           ),
                         ),
-                        Text('${movieData['runtime']} min')
+                        Text('${movieData['movieDetails']['runtime']} min')
                       ],
                     ),
                   ),
@@ -152,13 +155,10 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Budget',
-                          style: TextStyle(color: Colors.white60),
-                        ),
+                        Text('Budget', style: TextStyle(color: Colors.white60)),
                         SizedBox(height: 5.0),
                         Text(
-                            '${movieData['budget'].toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}')
+                            '${movieData['movieDetails']['budget'].toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}')
                       ],
                     ),
                   ),
@@ -166,12 +166,10 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Released',
-                          style: TextStyle(color: Colors.white60),
-                        ),
+                        Text('Released',
+                            style: TextStyle(color: Colors.white60)),
                         SizedBox(height: 5.0),
-                        Text('${movieData['release_date']}')
+                        Text('${movieData['movieDetails']['release_date']}')
                       ],
                     ),
                   ),
@@ -179,14 +177,9 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Likes',
-                          style: TextStyle(color: Colors.white60),
-                        ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text('${movieData['vote_count']}')
+                        Text('Likes', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 5.0),
+                        Text('${movieData['movieDetails']['vote_count']}')
                       ],
                     ),
                   ),
@@ -203,16 +196,12 @@ class _MoviesDetailsState extends State<MoviesDetails> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Synopsis',
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
+                  Text('Synopsis',
+                      style: TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold)),
                   SizedBox(height: 15.0),
-                  Text(
-                    '${movieData['overview']}',
-                    style: TextStyle(color: Colors.white70, fontSize: 15.0),
-                  )
+                  Text('${movieData['movieDetails']['overview']}',
+                      style: TextStyle(color: Colors.white70, fontSize: 15.0))
                 ],
               ), //Synopsis
               SizedBox(height: 20.0),
@@ -236,7 +225,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                 physics: BouncingScrollPhysics(),
                                 children: [
                                   for (int i = 0;
-                                      i < crewData['cast'].length;
+                                      i < crewData['credits'].length;
                                       i++)
                                     Container(
                                       width: 140.0,
@@ -251,26 +240,23 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                             backgroundImage: NetworkImage(
                                                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSClCC2sTN0JYMZx12xcEgb5lELVfcJbTWAgmypCgB_fhJ6_VSx_fmrojdUj48pa7G5aYY&usqp=CAU'),
                                             foregroundImage: NetworkImage(
-                                                'https://image.tmdb.org/t/p/w185/${crewData['cast'][i]['profile_path']}'),
+                                                'https://image.tmdb.org/t/p/w185/${crewData['credits'][i]['profile_path']}'),
                                           )),
                                           Text(
-                                            '${crewData['cast'][i]['name']}',
-                                            textAlign: TextAlign.center,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w500,
-                                              fontSize: 16.0,
-                                            ),
-                                          ),
+                                              '${crewData['credits'][i]['name']}',
+                                              textAlign: TextAlign.center,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 16.0)),
                                           Text(
-                                            '${crewData['cast'][i]['character']}',
-                                            textAlign: TextAlign.center,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: Colors.white70),
-                                          )
+                                              '${crewData['credits'][i]['character']}',
+                                              textAlign: TextAlign.center,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  color: Colors.white70))
                                         ],
                                       ),
                                     )
@@ -290,26 +276,21 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Expanded(
-                                          child: Icon(
-                                            Icons.person_pin,
-                                            size: 90.0,
-                                          ),
-                                        ),
+                                            child: Icon(Icons.person_pin,
+                                                size: 90.0)),
                                         Container(
                                           margin: EdgeInsets.all(5.0),
                                           width: 100.0,
                                           child: LinearProgressIndicator(
-                                            color: Color(0xff424242),
-                                            minHeight: 16.0,
-                                          ),
+                                              color: Color(0xff424242),
+                                              minHeight: 16.0),
                                         ),
                                         Container(
                                           margin: EdgeInsets.all(5.0),
                                           width: 80.0,
                                           child: LinearProgressIndicator(
-                                            color: Color(0xff424242),
-                                            minHeight: 16.0,
-                                          ),
+                                              color: Color(0xff424242),
+                                              minHeight: 16.0),
                                         ),
                                       ],
                                     ),
@@ -339,7 +320,9 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                               physics: BouncingScrollPhysics(),
                               children: [
                                 for (int i = 0;
-                                    i < movieImages['backdrops'].length;
+                                    i <
+                                        movieImages['images']['backdrops']
+                                            .length;
                                     i++)
                                   Container(
                                     margin: EdgeInsets.all(10.0),
@@ -351,7 +334,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: Image.network(
-                                        'https://image.tmdb.org/t/p/w1280/${movieImages['backdrops'][i]['file_path']}',
+                                        'https://image.tmdb.org/t/p/w1280/${movieImages['images']['backdrops'][i]['file_path']}',
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -372,8 +355,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                       borderRadius: BorderRadius.circular(10.0),
                                       boxShadow: [kBoxShadow]),
                                   child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
+                                      child: CircularProgressIndicator()),
                                 ),
                             ],
                           );
@@ -388,9 +370,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                   Text('Recommended',
                       style: TextStyle(
                           fontSize: 24.0, fontWeight: FontWeight.bold)),
-                  SizedBox(
-                    height: 15.0,
-                  ),
+                  SizedBox(height: 15.0),
                   Container(
                       height: 260.0,
                       child: FutureBuilder(
@@ -403,7 +383,9 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                 physics: BouncingScrollPhysics(),
                                 children: [
                                   for (int i = 0;
-                                      i < recommendations['results'].length;
+                                      i <
+                                          recommendations['recommendations']
+                                              .length;
                                       i++)
                                     Container(
                                       width: 160.0,
@@ -413,8 +395,9 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                           GestureDetector(
                                             onTap: () async {
                                               await getRecommendedMovieDetails(
-                                                  recommendations['results'][i]
-                                                          ['id']
+                                                  recommendations[
+                                                              'recommendations']
+                                                          [i]['id']
                                                       .toString());
                                               Navigator.pushReplacementNamed(
                                                   context, MoviesDetails.id,
@@ -433,7 +416,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                                 borderRadius:
                                                     BorderRadius.circular(10.0),
                                                 child: Image.network(
-                                                  'https://image.tmdb.org/t/p/w185/${recommendations['results'][i]['poster_path']}',
+                                                  'https://image.tmdb.org/t/p/w185/${recommendations['recommendations'][i]['poster_path']}',
                                                   fit: BoxFit.fill,
                                                 ),
                                               ),
@@ -441,7 +424,7 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                           ),
                                           SizedBox(height: 5.0),
                                           Text(
-                                            '${recommendations['results'][i]['title']}',
+                                            '${recommendations['recommendations'][i]['title']}',
                                             overflow: TextOverflow.ellipsis,
                                             maxLines: 2,
                                             textAlign: TextAlign.center,
@@ -467,18 +450,17 @@ class _MoviesDetailsState extends State<MoviesDetails> {
                                     child: Column(
                                       children: [
                                         Container(
-                                          height: 180.0,
-                                          width: 160.0,
-                                          decoration: BoxDecoration(
-                                            color: Color(0xff424242),
-                                            borderRadius:
-                                                BorderRadius.circular(10.0),
-                                            boxShadow: [kBoxShadow],
-                                          ),
-                                          child: Center(
-                                              child:
-                                                  CircularProgressIndicator()),
-                                        ),
+                                            height: 180.0,
+                                            width: 160.0,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xff424242),
+                                              borderRadius:
+                                                  BorderRadius.circular(10.0),
+                                              boxShadow: [kBoxShadow],
+                                            ),
+                                            child: Center(
+                                                child:
+                                                    CircularProgressIndicator())),
                                         SizedBox(height: 5.0),
                                         Container(
                                           margin: EdgeInsets.all(5.0),
@@ -512,14 +494,16 @@ class _MoviesDetailsState extends State<MoviesDetails> {
         backgroundColor: Color(0xff424242),
         elevation: 0.0,
         foregroundColor: Colors.lightGreenAccent,
-        onPressed: () {
+        onPressed: () async {
+          bool added = await addToWatchlist({
+            'title': movieData['movieDetails']['title'],
+            'poster': movieData['movieDetails']['poster_path'],
+            'id': movieData['movieDetails']['id'].toString()
+          });
           //TODO: Add to watchlist
           Fluttertoast.showToast(msg: 'Added to Watchlist');
         },
-        child: Icon(
-          Icons.add_task_rounded,
-          size: 30.0,
-        ),
+        child: Icon(Icons.add_task_rounded, size: 30.0),
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:movie_cite/components/card_loader.dart';
 import 'package:movie_cite/components/carousel_loader.dart';
+import 'package:movie_cite/constants.dart';
 import 'package:movie_cite/screens/movies_details.dart';
 
 import '../data/genres.dart';
@@ -50,10 +51,11 @@ class _MoviesState extends State<Movies> {
 
   @override
   void initState() {
-    // getPopularMovies();
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
     super.initState();
+    // getNowPlayingMovies();
+    // getPopularMovies();
   }
 
   @override
@@ -61,9 +63,7 @@ class _MoviesState extends State<Movies> {
     return Scaffold(
       body: Column(
         children: [
-          SizedBox(
-            height: 10.0,
-          ),
+          SizedBox(height: 10.0),
           scrollDetected
               ? Container()
               : FutureBuilder(
@@ -71,37 +71,31 @@ class _MoviesState extends State<Movies> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       return CarouselSlider(
-                        items: carouselImages
-                            .map(
-                              (i) => GestureDetector(
-                                onTap: () async {
-                                  await getMovieDetails(i['id']);
-                                  Navigator.pushNamed(context, MoviesDetails.id,
-                                      arguments: movieDetails);
-                                },
-                                child: Container(
-                                  width: 350.0,
-                                  margin: EdgeInsets.symmetric(horizontal: 2.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      'https://image.tmdb.org/t/p/w1280/${i['path']}',
-                                      fit: BoxFit.fill,
+                          items: carouselImages
+                              .map(
+                                (i) => GestureDetector(
+                                  onTap: () async {
+                                    await getMovieDetails(i['id']);
+                                    Navigator.pushNamed(
+                                        context, MoviesDetails.id,
+                                        arguments: movieDetails);
+                                  },
+                                  child: Container(
+                                    width: 350.0,
+                                    margin:
+                                        EdgeInsets.symmetric(horizontal: 2.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.network(
+                                        'https://image.tmdb.org/t/p/w1280/${i['path']}',
+                                        fit: BoxFit.fill,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            )
-                            .toList(),
-                        options: CarouselOptions(
-                            autoPlay: true,
-                            enlargeCenterPage: true,
-                            autoPlayInterval: Duration(seconds: 3),
-                            autoPlayAnimationDuration: Duration(seconds: 2),
-                            height: 230,
-                            aspectRatio: 9 / 9,
-                            enlargeFactor: 0.2),
-                      );
+                              )
+                              .toList(),
+                          options: kCarouselOptions);
                     }
                     return CarouselLoader();
                   }),
@@ -123,7 +117,7 @@ class _MoviesState extends State<Movies> {
                                 GestureDetector(
                                   onTap: () async {
                                     await getMovieDetails(
-                                        popularMoviesList['results'][i]['id']
+                                        popularMoviesList['movies'][i]['id']
                                             .toString());
                                     Navigator.pushNamed(
                                         context, MoviesDetails.id,
@@ -136,7 +130,7 @@ class _MoviesState extends State<Movies> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: Image.network(
-                                        'https://image.tmdb.org/t/p/w185/${popularMoviesList['results'][i]['poster_path']}',
+                                        'https://image.tmdb.org/t/p/w185/${popularMoviesList['movies'][i]['poster_path']}',
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -153,43 +147,35 @@ class _MoviesState extends State<Movies> {
                                           MainAxisAlignment.spaceAround,
                                       children: [
                                         Text(
-                                          '${popularMoviesList['results'][i]['title']}',
+                                          '${popularMoviesList['movies'][i]['title']}',
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
                                           style: TextStyle(
                                               fontSize: 20.0,
                                               fontWeight: FontWeight.w500),
                                         ),
-                                        SizedBox(
-                                          height: 10.0,
-                                        ),
+                                        SizedBox(height: 10.0),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             RatingBarIndicator(
                                               rating:
-                                                  (popularMoviesList['results']
+                                                  (popularMoviesList['movies']
                                                           [i]['vote_average']) /
                                                       2,
                                               itemBuilder: (context, index) =>
-                                                  Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              ),
+                                                  Icon(Icons.star,
+                                                      color: Colors.amber),
                                               itemCount: 5,
                                               itemSize: 25.0,
                                             ),
-                                            SizedBox(
-                                              width: 20.0,
-                                            ),
+                                            SizedBox(width: 20.0),
                                             Text(
-                                              '${popularMoviesList['results'][i]['vote_average']}',
+                                              '${popularMoviesList['movies'][i]['vote_average']}',
                                               style: TextStyle(fontSize: 15.0),
                                             ),
-                                            SizedBox(
-                                              width: 5.0,
-                                            )
+                                            SizedBox(width: 5.0)
                                           ],
                                         ),
                                         Container(
@@ -202,7 +188,7 @@ class _MoviesState extends State<Movies> {
                                               for (int j = 0;
                                                   j <
                                                       popularMoviesList[
-                                                                  'results'][i]
+                                                                  'movies'][i]
                                                               ['genre_ids']
                                                           .length;
                                                   j++)
@@ -210,7 +196,7 @@ class _MoviesState extends State<Movies> {
                                                   margin: EdgeInsets.only(
                                                       right: 10.0),
                                                   child: Text(
-                                                    '${getMovieGenre(popularMoviesList['results'][i]['genre_ids'][j])}',
+                                                    '${getMovieGenre(popularMoviesList['movies'][i]['genre_ids'][j])}',
                                                     style: TextStyle(
                                                         fontSize: 16.0,
                                                         color: Colors.white60),
@@ -220,7 +206,7 @@ class _MoviesState extends State<Movies> {
                                           ),
                                         ),
                                         Text(
-                                            'Release : ${popularMoviesList['results'][i]['release_date'].toString()}')
+                                            'Release : ${popularMoviesList['movies'][i]['release_date'].toString()}')
                                       ],
                                     ),
                                   ),
@@ -244,4 +230,3 @@ class _MoviesState extends State<Movies> {
     );
   }
 }
-

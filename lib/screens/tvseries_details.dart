@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:movie_cite/constants.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:movie_cite/data/auth_api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/tvseries_details_api.dart';
 
@@ -18,16 +20,16 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
 
   @override
   Widget build(BuildContext context) {
-
     final Map<String, dynamic> arguments =
         ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>;
-    // setState(() {
-    //   if (arguments != null) tvSeriesData = arguments;
-    // });
+
     if (arguments != null) tvSeriesData = arguments;
-    responseStatus = getCastAndCrew(tvSeriesData['id'].toString());
-    responseStatus1 = getTvImages(tvSeriesData['id'].toString());
-    responseStatus3 = getRecommendedTvSeries(tvSeriesData['id'].toString());
+    responseStatus =
+        getCastAndCrew(tvSeriesData['tvSeriesDetails']['id'].toString());
+    responseStatus1 =
+        getTvImages(tvSeriesData['tvSeriesDetails']['id'].toString());
+    responseStatus3 = getRecommendedTvSeries(
+        tvSeriesData['tvSeriesDetails']['id'].toString());
 
     return Scaffold(
       appBar: AppBar(
@@ -49,7 +51,7 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(10.0),
                     child: Image.network(
-                      'https://image.tmdb.org/t/p/w185/${tvSeriesData['poster_path']}',
+                      'https://image.tmdb.org/t/p/w185/${tvSeriesData['tvSeriesDetails']['poster_path']}',
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -63,7 +65,7 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
-                          '${tvSeriesData['name']}',
+                          '${tvSeriesData['tvSeriesDetails']['name']}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                           style: TextStyle(
@@ -74,12 +76,11 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             RatingBar.builder(
-                                initialRating:
-                                    (tvSeriesData['vote_average']) / 2,
-                                itemBuilder: (context, index) => Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
+                                initialRating: (tvSeriesData['tvSeriesDetails']
+                                        ['vote_average']) /
+                                    2,
+                                itemBuilder: (context, index) =>
+                                    Icon(Icons.star, color: Colors.amber),
                                 allowHalfRating: true,
                                 itemCount: 5,
                                 itemSize: 27.0,
@@ -87,13 +88,11 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                                 glowColor: Colors.amberAccent,
                                 onRatingUpdate: (value) {
                                   final snackBar = SnackBar(
-                                    content: Text(
-                                      'Confirm your rating !',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w500),
-                                    ),
+                                    content: Text('Confirm your rating !',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w500)),
                                     backgroundColor: Color(0xff424242),
                                     action: SnackBarAction(
                                       textColor: Colors.cyanAccent,
@@ -110,9 +109,8 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                                 }),
                             SizedBox(width: 20.0),
                             Text(
-                              '${tvSeriesData['vote_average'].toStringAsFixed(2)}',
-                              style: TextStyle(fontSize: 15.0),
-                            ),
+                                '${tvSeriesData['tvSeriesDetails']['vote_average'].toStringAsFixed(2)}',
+                                style: TextStyle(fontSize: 15.0)),
                             SizedBox(width: 5.0)
                           ],
                         ), //Rating
@@ -124,12 +122,14 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                             scrollDirection: Axis.horizontal,
                             children: [
                               for (int j = 0;
-                                  j < tvSeriesData['genres'].length;
+                                  j <
+                                      tvSeriesData['tvSeriesDetails']['genres']
+                                          .length;
                                   j++)
                                 Container(
                                   margin: EdgeInsets.only(right: 10.0),
                                   child: Text(
-                                    '${tvSeriesData['genres'][j]['name']}',
+                                    '${tvSeriesData['tvSeriesDetails']['genres'][j]['name']}',
                                     style: TextStyle(
                                         fontSize: 16.0, color: Colors.white60),
                                   ),
@@ -137,7 +137,8 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                             ],
                           ),
                         ),
-                        Text('${tvSeriesData['number_of_seasons']} seasons')
+                        Text(
+                            '${tvSeriesData['tvSeriesDetails']['number_of_seasons']} seasons')
                       ],
                     ),
                   ),
@@ -155,12 +156,11 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Episodes',
-                          style: TextStyle(color: Colors.white60),
-                        ),
+                        Text('Episodes',
+                            style: TextStyle(color: Colors.white60)),
                         SizedBox(height: 5.0),
-                        Text('${tvSeriesData['number_of_episodes']}')
+                        Text(
+                            '${tvSeriesData['tvSeriesDetails']['number_of_episodes']}')
                       ],
                     ),
                   ),
@@ -168,12 +168,10 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Aired',
-                          style: TextStyle(color: Colors.white60),
-                        ),
+                        Text('Aired', style: TextStyle(color: Colors.white60)),
                         SizedBox(height: 5.0),
-                        Text('${tvSeriesData['last_air_date']}')
+                        Text(
+                            '${tvSeriesData['tvSeriesDetails']['last_air_date']}')
                       ],
                     ),
                   ),
@@ -181,14 +179,9 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Likes',
-                          style: TextStyle(color: Colors.white60),
-                        ),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text('${tvSeriesData['vote_count']}')
+                        Text('Likes', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 5.0),
+                        Text('${tvSeriesData['tvSeriesDetails']['vote_count']}')
                       ],
                     ),
                   ),
@@ -205,27 +198,21 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Synopsis',
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
+                  Text('Synopsis',
+                      style: TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold)),
                   SizedBox(height: 15.0),
-                  Text(
-                    '${tvSeriesData['overview']}',
-                    style: TextStyle(color: Colors.white70, fontSize: 15.0),
-                  )
+                  Text('${tvSeriesData['tvSeriesDetails']['overview']}',
+                      style: TextStyle(color: Colors.white70, fontSize: 15.0))
                 ],
               ), //Synopsis
               SizedBox(height: 30.0),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Crew & Cast',
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
+                  Text('Crew & Cast',
+                      style: TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold)),
                   SizedBox(height: 10.0),
                   Container(
                     height: 180.0,
@@ -240,7 +227,7 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                               physics: BouncingScrollPhysics(),
                               children: [
                                 for (int i = 0;
-                                    i < crewData['cast'].length;
+                                    i < crewData['credits'].length;
                                     i++)
                                   Container(
                                     width: 140.0,
@@ -255,26 +242,24 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                                           backgroundImage: NetworkImage(
                                               'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSClCC2sTN0JYMZx12xcEgb5lELVfcJbTWAgmypCgB_fhJ6_VSx_fmrojdUj48pa7G5aYY&usqp=CAU'),
                                           foregroundImage: NetworkImage(
-                                              'https://image.tmdb.org/t/p/w185/${crewData['cast'][i]['profile_path']}'),
+                                              'https://image.tmdb.org/t/p/w185/${crewData['credits'][i]['profile_path']}'),
                                         )),
                                         Text(
-                                          '${crewData['cast'][i]['name']}',
+                                          '${crewData['credits'][i]['name']}',
                                           textAlign: TextAlign.center,
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 16.0,
-                                          ),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 16.0),
                                         ),
                                         Text(
-                                          '${crewData['cast'][i]['character']}',
-                                          textAlign: TextAlign.center,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style:
-                                              TextStyle(color: Colors.white70),
-                                        )
+                                            '${crewData['credits'][i]['character']}',
+                                            textAlign: TextAlign.center,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                                color: Colors.white70))
                                       ],
                                     ),
                                   )
@@ -294,26 +279,22 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
                                       Expanded(
-                                        child: Icon(
-                                          Icons.person_pin,
-                                          size: 90.0,
-                                        ),
+                                        child:
+                                            Icon(Icons.person_pin, size: 90.0),
                                       ),
                                       Container(
                                         margin: EdgeInsets.all(5.0),
                                         width: 100.0,
                                         child: LinearProgressIndicator(
-                                          color: Color(0xff424242),
-                                          minHeight: 16.0,
-                                        ),
+                                            color: Color(0xff424242),
+                                            minHeight: 16.0),
                                       ),
                                       Container(
                                         margin: EdgeInsets.all(5.0),
                                         width: 80.0,
                                         child: LinearProgressIndicator(
-                                          color: Color(0xff424242),
-                                          minHeight: 16.0,
-                                        ),
+                                            color: Color(0xff424242),
+                                            minHeight: 16.0),
                                       ),
                                     ],
                                   ),
@@ -328,11 +309,9 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Gallery',
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
+                  Text('Gallery',
+                      style: TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold)),
                   SizedBox(height: 15.0),
                   Container(
                     height: 220.0,
@@ -346,7 +325,7 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                               physics: BouncingScrollPhysics(),
                               children: [
                                 for (int i = 0;
-                                    i < tvImages['backdrops'].length;
+                                    i < tvImages['images']['backdrops'].length;
                                     i++)
                                   Container(
                                     margin: EdgeInsets.all(10.0),
@@ -358,7 +337,7 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: Image.network(
-                                        'https://image.tmdb.org/t/p/w1280/${tvImages['backdrops'][i]['file_path']}',
+                                        'https://image.tmdb.org/t/p/w1280/${tvImages['images']['backdrops'][i]['file_path']}',
                                         fit: BoxFit.fill,
                                       ),
                                     ),
@@ -392,14 +371,10 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Recommended',
-                    style:
-                        TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 15.0
-                  ),
+                  Text('Recommended',
+                      style: TextStyle(
+                          fontSize: 24.0, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 15.0),
                   Container(
                     height: 260.0,
                     child: FutureBuilder(
@@ -412,7 +387,9 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                               physics: BouncingScrollPhysics(),
                               children: [
                                 for (int i = 0;
-                                    i < recommendations['results'].length;
+                                    i <
+                                        recommendations['recommendations']
+                                            .length;
                                     i++)
                                   Container(
                                     width: 160.0,
@@ -420,10 +397,17 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                                     child: Column(
                                       children: [
                                         GestureDetector(
-                                        onTap: () async{
-                                  await getRecommendedTvSeriesDetails(recommendations['results'][i]['id'].toString());
-                                  Navigator.pushReplacementNamed(context, TvSeriesDetails.id ,arguments: recommendedTvSeriesDetails);
-                                  },
+                                          onTap: () async {
+                                            await getRecommendedTvSeriesDetails(
+                                                recommendations[
+                                                            'recommendations']
+                                                        [i]['id']
+                                                    .toString());
+                                            Navigator.pushReplacementNamed(
+                                                context, TvSeriesDetails.id,
+                                                arguments:
+                                                    recommendedTvSeriesDetails);
+                                          },
                                           child: Container(
                                             height: 180.0,
                                             width: 160.0,
@@ -436,7 +420,7 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                                               borderRadius:
                                                   BorderRadius.circular(10.0),
                                               child: Image.network(
-                                                'https://image.tmdb.org/t/p/w185/${recommendations['results'][i]['poster_path']}',
+                                                'https://image.tmdb.org/t/p/w185/${recommendations['recommendations'][i]['poster_path']}',
                                                 fit: BoxFit.fill,
                                               ),
                                             ),
@@ -444,7 +428,7 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
                                         ),
                                         SizedBox(height: 5.0),
                                         Text(
-                                          '${recommendations['results'][i]['name']}',
+                                          '${recommendations['recommendations'][i]['name']}',
                                           overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
                                           textAlign: TextAlign.center,
@@ -515,14 +499,15 @@ class _TvSeriesDetailsState extends State<TvSeriesDetails> {
         backgroundColor: Color(0xff424242),
         elevation: 0.0,
         foregroundColor: Colors.lightGreenAccent,
-        onPressed: () {
-          //TODO: Add to watchlist
+        onPressed: () async {
+          bool added = await addToWatchlist({
+            'title': tvSeriesData['tvSeriesDetails']['name'],
+            'poster': tvSeriesData['tvSeriesDetails']['poster_path'],
+            'id': tvSeriesData['tvSeriesDetails']['id'].toString()
+          });
           Fluttertoast.showToast(msg: 'Added to Watchlist');
         },
-        child: Icon(
-          Icons.add_task_rounded,
-          size: 30.0,
-        ),
+        child: Icon(Icons.add_task_rounded, size: 30.0),
       ),
     );
   }

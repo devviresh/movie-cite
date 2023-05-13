@@ -16,27 +16,27 @@ class _AuthPageState extends State<AuthPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         leading: Hero(
           tag: 'icon',
-          child: Icon(
-            Icons.camera_indoor_outlined,
-            size: 32.0,
-          ),
+          child: Icon(Icons.camera_indoor_outlined, size: 32.0),
         ),
         title: Text('Movie-Cite'),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('images/welcome.jpg'),
+              fit: BoxFit.cover
+          ),
+        ),
         padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(
-              'Sign In / Sign Up',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 30.0,
-            ),
+            Text('Sign In / Sign Up',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+            SizedBox(height: 30.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -50,13 +50,12 @@ class _AuthPageState extends State<AuthPage> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0))),
                     child: Text('Email')),
-                SizedBox(
-                  width: 10.0,
-                ),
+                SizedBox(width: 10.0),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, HomePage.id);
                   },
+                  // onPressed: null,
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(
@@ -64,16 +63,11 @@ class _AuthPageState extends State<AuthPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       )),
-                  child: Text(
-                    'Google',
-                    style: TextStyle(color: Colors.black),
-                  ),
+                  child: Text('Google', style: TextStyle(color: Colors.black)),
                 ),
               ],
             ),
-            SizedBox(
-              height: 20.0,
-            ),
+            SizedBox(height: 20.0),
             ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, RegisterPage.id);
@@ -88,9 +82,7 @@ class _AuthPageState extends State<AuthPage> {
                       side: BorderSide(color: Colors.red)),
                 ),
                 child: Text('Register')),
-            SizedBox(
-              height: 30.0,
-            )
+            SizedBox(height: 30.0)
           ],
         ),
       ),

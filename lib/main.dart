@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:movie_cite/authentication/auth_page.dart';
 import 'package:movie_cite/authentication/login_page.dart';
 import 'package:movie_cite/authentication/register_page.dart';
@@ -9,29 +10,36 @@ import 'package:movie_cite/screens/notifications.dart';
 import 'package:movie_cite/screens/search/search_page.dart';
 import 'package:movie_cite/screens/search/search_results.dart';
 import 'package:movie_cite/screens/tvseries_details.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'welcome_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-
-void main () async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(const MovieCite());
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  print('main ${prefs.getString('token')}');
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  runApp(MovieCite(
+    token: prefs.getString('token'),
+  ));
 }
 
 class MovieCite extends StatelessWidget {
-  const MovieCite({Key? key}) : super(key: key);
+  final token;
+
+  const MovieCite({@required this.token, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark().copyWith(),
       initialRoute: WelcomePage.id,
+      // initialRoute:
+      //     (JwtDecoder.isExpired(token) == true) ? WelcomePage.id : HomePage.id,
       routes: {
-
         WelcomePage.id: (context) => WelcomePage(),
         AuthPage.id: (context) => AuthPage(),
         LoginPage.id: (context) => LoginPage(),

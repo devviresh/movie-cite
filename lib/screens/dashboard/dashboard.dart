@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:movie_cite/data/auth_api.dart';
 import 'package:movie_cite/screens/dashboard/edit_profile.dart';
 import 'package:movie_cite/screens/dashboard/friendList.dart';
 import 'package:movie_cite/screens/dashboard/watchlist.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
+import '../home.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -22,7 +25,23 @@ class _DashboardState extends State<Dashboard> {
   }
 
   @override
+  void initState() {
+    setState(() {
+    });
+    super.initState();
+  }
+
+  void updateWatchlist() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    getUserDetails(token);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    setState(() {
+      updateWatchlist();
+    });
     return Scaffold(
       body: Column(
         children: [
@@ -33,17 +52,16 @@ class _DashboardState extends State<Dashboard> {
               children: [
                 CircleAvatar(
                   radius: 50.0,
-                  foregroundImage: AssetImage('./images/sifat.jpeg'),
+                  foregroundImage: (selectedImage == null)
+                      ? AssetImage('images/viresh.jpeg')
+                      : FileImage(selectedImage!)
+                  as ImageProvider,
                 ),
                 SizedBox(height: 10.0),
-                Text(
-                  'Sifat Naaz',
-                  style: TextStyle(fontSize: 30.0),
-                ),
-                Text(
-                  'Drama Tragedy',
-                  style: TextStyle(color: Colors.white60),
-                )
+                Text('${userDetails['userData']['name']}',
+                    style: TextStyle(fontSize: 30.0)),
+                Text('${userDetails['userData']['interest']}',
+                    style: TextStyle(color: Colors.white60))
               ],
             ),
           ),
@@ -74,10 +92,7 @@ class _DashboardState extends State<Dashboard> {
         onPressed: () {
           Navigator.pushNamed(context, EditProfile.id);
         },
-        child: Icon(
-          Icons.edit,
-          size: 25.0,
-        ),
+        child: Icon(Icons.edit, size: 25.0),
       ),
     );
   }

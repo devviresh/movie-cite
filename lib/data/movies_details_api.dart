@@ -14,8 +14,10 @@ late Future responseStatus1; //changed gallery
 late Future responseStatus3; //changed recommendations
 
 Future getCastAndCrew(String id) async {
-  http.Response response = await http.get(Uri.parse(
-      '$baseUrl/movie/$id/credits?api_key=$apiKey'));
+  http.Response response = await http.get(
+    Uri.parse('$baseUrl/movies/$id/credits'),
+    // headers: {'Authorization': 'Bearer $token'}
+  );
   if (response.statusCode == 200) {
     crewData = jsonDecode(response.body);
   } else {
@@ -24,8 +26,8 @@ Future getCastAndCrew(String id) async {
 }
 
 Future getMovieImages(String id) async {
-  http.Response response = await http.get(Uri.parse(
-      '$baseUrl/movie/$id/images?api_key=$apiKey'));
+  http.Response response =
+      await http.get(Uri.parse('$baseUrl/movies/$id/images'));
   if (response.statusCode == 200) {
     movieImages = jsonDecode(response.body);
   } else {
@@ -34,7 +36,8 @@ Future getMovieImages(String id) async {
 }
 
 Future getRecommendedMovies(String id) async {
-  http.Response response = await http.get(Uri.parse('$baseUrl/movie/$id/recommendations?api_key=$apiKey&language=en-US&page=1'));
+  http.Response response =
+      await http.get(Uri.parse('$baseUrl/movies/$id/recommendations'));
   if (response.statusCode == 200) {
     recommendations = jsonDecode(response.body);
   } else {
@@ -43,7 +46,7 @@ Future getRecommendedMovies(String id) async {
 }
 
 Future getRecommendedMovieDetails(String id) async {
-  http.Response response = await http.get(Uri.parse('$baseUrl/movie/$id?api_key=$apiKey&language=en-US'));
+  http.Response response = await http.get(Uri.parse('$baseUrl/movies/$id'));
   if (response.statusCode == 200) {
     recommendedMovieDetails = jsonDecode(response.body);
   } else {

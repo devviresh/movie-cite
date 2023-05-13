@@ -63,14 +63,12 @@ class _MoviesSearchState extends State<MoviesSearch> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceAround,
                                       children: [
-                                        Text(
-                                          '${movies['results'][i]['title']}',
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                              fontSize: 20.0,
-                                              fontWeight: FontWeight.w500),
-                                        ),
+                                        Text('${movies['results'][i]['title']}',
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.w500)),
                                         SizedBox(height: 10.0),
                                         Row(
                                           mainAxisAlignment:
@@ -81,10 +79,8 @@ class _MoviesSearchState extends State<MoviesSearch> {
                                                       ['vote_average']) /
                                                   2,
                                               itemBuilder: (context, index) =>
-                                                  Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              ),
+                                                  Icon(Icons.star,
+                                                      color: Colors.amber),
                                               itemCount: 5,
                                               itemSize: 25.0,
                                             ),
@@ -113,11 +109,11 @@ class _MoviesSearchState extends State<MoviesSearch> {
                                                   margin: EdgeInsets.only(
                                                       right: 10.0),
                                                   child: Text(
-                                                    '${getMovieGenre(movies['results'][i]['genre_ids'][j])}',
-                                                    style: TextStyle(
-                                                        fontSize: 16.0,
-                                                        color: Colors.white60),
-                                                  ),
+                                                      '${getMovieGenre(movies['results'][i]['genre_ids'][j])}',
+                                                      style: TextStyle(
+                                                          fontSize: 16.0,
+                                                          color:
+                                                              Colors.white60)),
                                                 )
                                             ],
                                           ),
@@ -143,10 +139,7 @@ class _MoviesSearchState extends State<MoviesSearch> {
               return Expanded(
                 child: ListView(
                   physics: BouncingScrollPhysics(),
-                  children: [
-                    for (int i = 0; i < 3; i++)
-                      CardLoader()
-                  ],
+                  children: [for (int i = 0; i < 3; i++) CardLoader()],
                 ),
               );
             }),
@@ -154,7 +147,3 @@ class _MoviesSearchState extends State<MoviesSearch> {
     );
   }
 }
-
-
-
-
