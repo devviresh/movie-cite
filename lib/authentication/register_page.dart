@@ -84,7 +84,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       TextStyle(fontWeight: FontWeight.w500, fontSize: 15.0)),
               SizedBox(height: 30.0),
               TextFormField(
-
                   keyboardType: TextInputType.emailAddress,
                   textAlign: TextAlign.center,
                   onChanged: (value) {
